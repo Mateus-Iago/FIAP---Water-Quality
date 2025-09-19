@@ -1,0 +1,48 @@
+// Pinos dos LEDs (ajuste conforme sua ligação)
+const int RED_PIN    = 11;
+const int YELLOW_PIN = 10;
+const int GREEN_PIN  = 9;
+
+void setLeds(bool r, bool y, bool g) {
+  digitalWrite(RED_PIN,    r ? HIGH : LOW);
+  digitalWrite(YELLOW_PIN, y ? HIGH : LOW);
+  digitalWrite(GREEN_PIN,  g ? HIGH : LOW);
+}
+
+void setup() {
+  Serial.begin(9600);
+
+  pinMode(RED_PIN, OUTPUT);
+  pinMode(YELLOW_PIN, OUTPUT);
+  pinMode(GREEN_PIN, OUTPUT);
+
+  // Estado inicial: Vermelho ligado (sem rosto)
+  setLeds(true, false, false);
+}
+
+void loop() {
+  if (Serial.available() > 0) {
+    char cmd = Serial.read();
+
+    switch (cmd) {
+      case 'R': // Vermelho
+      case 'r':
+        setLeds(true, false, false);
+        break;
+
+      case 'Y': // Amarelo
+      case 'y':
+        setLeds(false, true, false);
+        break;
+
+      case 'G': // Verde
+      case 'g':
+        setLeds(false, false, true);
+        break;
+
+      default:
+        // Ignora caracteres desconhecidos
+        break;
+    }
+  }
+}
